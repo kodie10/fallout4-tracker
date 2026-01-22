@@ -3,6 +3,7 @@ const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 require('dotenv').config();
+const path = require('path');
 
 const buildPath = path.join(__dirname, 'client/build'); 
 app.use(express.static(buildPath));
