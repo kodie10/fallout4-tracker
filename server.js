@@ -8,28 +8,31 @@ const fs = require('fs');
 
 const app = express();
 
-const buildPath = path.join(process.cwd(), 'client', 'build');
+const staticPath = path.join(process.cwd(), 'public');
 
 console.log('Current working dir:', process.cwd());
-console.log('Expected build path:', buildPath);
-if (fs.existsSync(buildPath)) {
-  console.log('Build folder exists! Files:', fs.readdirSync(buildPath));
+console.log('Serving static from:', staticPath);
+
+if (fs.existsSync(staticPath)) {
+  console.log('public folder exists! Contents:', fs.readdirSync(staticPath));
 } else {
-  console.log('Build folder MISSING!');
+  console.log('public folder MISSING!');
 }
 
-app.use(express.static(buildPath));
+app.use(express.static(staticPath));
 
-// SPA fallback route
+// SPA fallback for React Router
 app.get('*', (req, res) => {
-  const indexPath = path.join(buildPath, 'index.html');
+  const indexPath = path.join(staticPath, 'index.html');
   console.log('Trying to serve index.html from:', indexPath);
-  res.sendFile(indexPath, (err) => {
-    if (err) {
-      console.error('SendFile failed:', err);
-      res.status(500).send('Failed to load the app - check build');
-    }
-  });
+
+  if (fs.existsSync(indexPath)) {
+    console.log('index.html FOUND!');
+    res.sendFile(indexPath);
+  } else {
+    console.error('index.html MISSING!');
+    res.status(404).send('index.html not found - check public folder');
+  }
 });
 const port = process.env.PORT || 3001;
 
