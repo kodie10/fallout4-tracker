@@ -4,13 +4,19 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
 const buildPath = path.join(process.cwd(), 'client', 'build');
 
-// Log for debugging (remove later if you want)
-console.log('Static build path:', buildPath);
+console.log('Current working dir:', process.cwd());
+console.log('Expected build path:', buildPath);
+if (fs.existsSync(buildPath)) {
+  console.log('Build folder exists! Files:', fs.readdirSync(buildPath));
+} else {
+  console.log('Build folder MISSING!');
+}
 
 app.use(express.static(buildPath));
 
