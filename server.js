@@ -7,15 +7,23 @@ const path = require('path');
 
 const app = express();
 
-const buildPath = path.join(process.cwd(), 'client', 'build'); 
+const buildPath = path.join(process.cwd(), 'client', 'build');
+
+// Log for debugging (remove later if you want)
+console.log('Static build path:', buildPath);
+
 app.use(express.static(buildPath));
 
-
-
+// SPA fallback route
 app.get('*', (req, res) => {
   const indexPath = path.join(buildPath, 'index.html');
-  console.log('Trying to serve:', indexPath);
-  res.sendFile(indexPath);
+  console.log('Trying to serve index.html from:', indexPath);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('SendFile failed:', err);
+      res.status(500).send('Failed to load the app - check build');
+    }
+  });
 });
 const port = process.env.PORT || 3001;
 
