@@ -25,12 +25,11 @@ module.exports = async (req, res) => {
   }
 
   const pool = getPool();
+  
+  // Get userId from the dynamic route parameter
+  const { userId } = req.query;
 
-  // Extract userId from URL path
-  const urlParts = req.url.split('/');
-  const userId = urlParts[urlParts.length - 1] || req.query.userId;
-
-  if (!userId || userId === 'progress') {
+  if (!userId) {
     return res.status(400).json({ error: 'User ID required' });
   }
 
@@ -53,6 +52,10 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
       // Update quest progress
       const { questName, completed } = req.body;
+
+      if (!questName) {
+        return res.status(400).json({ error: 'Quest name required' });
+      }
 
       await pool.query(
         `INSERT INTO quest_progress (user_id, quest_name, completed, completed_at)
