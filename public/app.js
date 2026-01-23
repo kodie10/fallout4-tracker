@@ -1,3 +1,5 @@
+const { useState, useEffect } = React;
+
 const FALLOUT4_QUESTS = {
   "Main Quests": [
     "War Never Changes",
