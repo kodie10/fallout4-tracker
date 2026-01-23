@@ -133,15 +133,20 @@ function App() {
     }
   }, [currentUser]);
 
-  const loadUserProgress = async () => {
-    try {
-      const response = await fetch(`/api/progress/${currentUser.id}`);
-      const data = await response.json();
-      setCompletedQuests(data);
-    } catch (error) {
-      console.error('Failed to load progress:', error);
+const loadUserProgress = async () => {
+  try {
+    const response = await fetch(`/api/progress/${currentUser.id}`);
+    if (!response.ok) {
+      console.error('Failed to load progress');
+      return;
     }
-  };
+    const data = await response.json();
+    console.log('Loaded progress:', data); // Debug log
+    setCompletedQuests(data);
+  } catch (error) {
+    console.error('Failed to load progress:', error);
+  }
+};
 
   const handleAuth = async () => {
     setError('');
