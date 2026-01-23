@@ -135,13 +135,13 @@ function App() {
 
 const loadUserProgress = async () => {
   try {
-    const response = await fetch(`/api/progress/${currentUser.id}`);
+    const response = await fetch(`/api/progress?userId=${currentUser.id}`);
     if (!response.ok) {
       console.error('Failed to load progress');
       return;
     }
     const data = await response.json();
-    console.log('Loaded progress:', data); // Debug log
+    console.log('Loaded progress:', data);
     setCompletedQuests(data);
   } catch (error) {
     console.error('Failed to load progress:', error);
@@ -192,24 +192,24 @@ const loadUserProgress = async () => {
     setShowMenu(false);
   };
 
-  const toggleQuest = async (quest) => {
-    const newCompleted = !completedQuests[quest];
-    const newProgress = {
-      ...completedQuests,
-      [quest]: newCompleted
-    };
-    setCompletedQuests(newProgress);
-
-    try {
-      await fetch(`/api/progress/${currentUser.id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ questName: quest, completed: newCompleted })
-      });
-    } catch (error) {
-      console.error('Failed to save progress:', error);
-    }
+const toggleQuest = async (quest) => {
+  const newCompleted = !completedQuests[quest];
+  const newProgress = {
+    ...completedQuests,
+    [quest]: newCompleted
   };
+  setCompletedQuests(newProgress);
+
+  try {
+    await fetch(`/api/progress?userId=${currentUser.id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ questName: quest, completed: newCompleted })
+    });
+  } catch (error) {
+    console.error('Failed to save progress:', error);
+  }
+};
 
   const toggleCategory = (category) => {
     setExpandedCategories(prev => ({
