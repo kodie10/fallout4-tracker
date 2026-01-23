@@ -1,55 +1,381 @@
-const { useState, useEffect } = React;
-
 const FALLOUT4_QUESTS = {
   "Main Quests": [
-    "Out of Time", "Jewel of the Commonwealth", "Unlikely Valentine", "Getting a Clue",
-    "Reunions", "Dangerous Minds", "The Glowing Sea", "Hunter/Hunted",
-    "The Molecular Level", "Institutionalized", "Mankind - Redefined", "Mass Fusion",
-    "Powering Up", "End of the Line", "Airship Down", "Rockets' Red Glare",
-    "The Nuclear Option"
+    "War Never Changes",
+    "Out of Time",
+    "Jewel of the Commonwealth",
+    "Unlikely Valentine",
+    "Getting a Clue",
+    "Reunions",
+    "Dangerous Minds",
+    "The Glowing Sea",
+    "Hunter/Hunted",
+    "The Molecular Level",
+    "Institutionalized",
+    "Mankind - Redefined",
+    "Mass Fusion",
+    "Powering Up",
+    "End of the Line",
+    "Airship Down",
+    "Rockets' Red Glare",
+    "The Nuclear Option (Minutemen)",
+    "The Nuclear Option (Railroad)",
+    "The Nuclear Option (Brotherhood of Steel)",
+    "The Nuclear Option (Institute)",
+    "Nuclear Family"
   ],
-  "Minutemen": [
-    "When Freedom Calls", "Sanctuary", "The First Step", "Taking Independence",
-    "Old Guns", "Inside Job", "Form Ranks", "Defend the Castle", "The Nuclear Option (Minutemen)"
+  
+  "Minutemen Quests": [
+    "When Freedom Calls",
+    "Sanctuary",
+    "The First Step",
+    "Taking Independence",
+    "Old Guns",
+    "Inside Job",
+    "Form Ranks",
+    "Defend the Castle",
+    "With Our Powers Combined",
+    "The Nuclear Option (Minutemen)",
+    "Completing the Gauntlet",
+    "Patrol",
+    "Kidnapping",
+    "Raider Troubles",
+    "Ghoul Problem",
+    "Resettle Refugees",
+    "Stop the Raiding",
+    "Returning the Favor",
+    "Clearing the Way",
+    "Defend Artillery at [Settlement]",
+    "Defend [Settlement]",
+    "Recruitment Beacon"
   ],
-  "Brotherhood of Steel": [
-    "Fire Support", "Call to Arms", "Semper Invicta", "Shadow of Steel",
-    "Tour of Duty", "Show No Mercy", "From Within", "Outside the Wire",
-    "Liberty Reprimed", "Blind Betrayal", "Tactical Thinking", "Spoils of War",
-    "Ad Victoriam", "The Nuclear Option (BoS)"
+  
+  "Brotherhood of Steel Quests": [
+    "Fire Support",
+    "Call to Arms",
+    "Semper Invicta",
+    "Shadow of Steel",
+    "Tour of Duty",
+    "Show No Mercy",
+    "From Within",
+    "Outside the Wire",
+    "Liberty Reprimed",
+    "Blind Betrayal",
+    "Tactical Thinking",
+    "Spoils of War",
+    "Ad Victoriam",
+    "A New Dawn",
+    "The Nuclear Option (BoS)",
+    "Feeding the Troops",
+    "Leading by Example",
+    "Quartermastery",
+    "Cleansing the Commonwealth",
+    "Learning Curve",
+    "Reactor Coolant",
+    "Duty or Dishonor",
+    "Blood Bank",
+    "Airship Down"
   ],
-  "Railroad": [
-    "Road to Freedom", "Tradecraft", "Boston After Dark", "Mercer Safehouse",
-    "Rocket's Red Glare", "Underground Undercover", "Operation Ticonderoga",
-    "Precipice of War", "The Nuclear Option (Railroad)"
+  
+  "Railroad Quests": [
+    "Road to Freedom",
+    "Tradecraft",
+    "Boston After Dark",
+    "Mercer Safehouse",
+    "Rockets' Red Glare",
+    "Underground Undercover",
+    "Operation Ticonderoga",
+    "Precipice of War",
+    "The Nuclear Option (Railroad)",
+    "Burning Cover",
+    "Memory Interrupted",
+    "Butcher's Bill",
+    "Butcher's Bill 2",
+    "Weathervane",
+    "Concierge",
+    "High Ground",
+    "Variable Removal",
+    "To the Mattresses",
+    "Randolph Safehouse",
+    "A Clean Equation",
+    "Boston After Dark",
+    "Mercer Safehouse"
   ],
-  "Institute": [
-    "Synth Retention", "The Battle of Bunker Hill", "Mankind - Redefined",
-    "Mass Fusion", "Pinned", "Powering Up", "End of the Line", "Airship Down"
+  
+  "Institute Quests": [
+    "Institutionalized",
+    "Synth Retention",
+    "The Battle of Bunker Hill",
+    "Mankind - Redefined",
+    "Mass Fusion",
+    "Pinned",
+    "Powering Up",
+    "End of the Line",
+    "Airship Down",
+    "Nuclear Family",
+    "Building a Better Crop",
+    "Plugging a Leak",
+    "Pest Control",
+    "Politics and Plots",
+    "Reclamation",
+    "A House Divided",
+    "Humanity Redefined",
+    "Banished from the Institute"
   ],
+  
   "Side Quests": [
-    "The Silver Shroud", "The Big Dig", "Diamond City Blues", "Here There Be Monsters",
-    "Last Voyage of the U.S.S. Constitution", "Emergent Behavior", "The Gilded Grasshopper",
-    "Confidence Man", "Human Error", "In Sheep's Clothing", "Curtain Call",
-    "Painting the Town", "Emogene Takes a Lover", "Long Time Coming",
-    "Order Up", "The Secret of Cabot House", "Special Delivery", "Mystery Meat"
+    "The Silver Shroud",
+    "The Big Dig",
+    "Diamond City Blues",
+    "Here There Be Monsters",
+    "Last Voyage of the U.S.S. Constitution",
+    "Emergent Behavior",
+    "The Gilded Grasshopper",
+    "Confidence Man",
+    "Human Error",
+    "In Sheep's Clothing",
+    "Curtain Call",
+    "Painting the Town",
+    "Emogene Takes a Lover",
+    "Long Time Coming",
+    "Order Up",
+    "The Secret of Cabot House",
+    "Special Delivery",
+    "Mystery Meat",
+    "Trouble Brewin'",
+    "Hole in the Wall",
+    "Cambridge Polymer Labs",
+    "Kid in a Fridge",
+    "Last Voyage of the USS Constitution",
+    "The Dig",
+    "Vault 81",
+    "Short Stories",
+    "Covenant",
+    "The Devil's Due",
+    "Brain Dead",
+    "Diamond City Radio",
+    "Good Neighbor"
   ],
+  
   "Companion Quests": [
-    "Benign Intervention (Curie)", "Emergent Behavior (Curie)", "Long Road Ahead (MacCready)",
-    "Blind Betrayal (Danse)", "The Disappearing Act (Deacon)", "Reunions (Nick Valentine)",
-    "Story of the Century (Piper)", "Unlikely Valentine (Nick)", "Human Error (Covenant)",
-    "In Sheep's Clothing (Covenant)", "Cait Affinity Quest", "Strong Affinity Quest"
+    "Benign Intervention (Curie)",
+    "Emergent Behavior (Curie)",
+    "Long Road Ahead (MacCready)",
+    "Blind Betrayal (Danse)",
+    "The Disappearing Act (Deacon)",
+    "Reunions (Nick Valentine)",
+    "Story of the Century (Piper)",
+    "Unlikely Valentine (Nick)",
+    "Cait's Affinity Quest",
+    "Strong's Affinity Quest",
+    "Codsworth's Affinity Quest",
+    "Dogmeat's Affinity Quest",
+    "Hancock's Affinity Quest",
+    "X6-88's Affinity Quest",
+    "Preston Garvey's Affinity Quest"
   ],
+  
+  "Miscellaneous Quests": [
+    "Tradecraft",
+    "Reunions",
+    "Dangerous Minds",
+    "Getting a Clue",
+    "Cambridge Polymer Labs",
+    "Covenant",
+    "The Devil's Due",
+    "Diamond City Blues",
+    "Emogene Takes a Lover",
+    "The Gilded Grasshopper",
+    "Here There Be Monsters",
+    "Human Error",
+    "The Last Voyage of the USS Constitution",
+    "Long Time Coming",
+    "Mystery Meat",
+    "Out of the Fire",
+    "Painting the Town",
+    "The Secret of Cabot House",
+    "The Silver Shroud",
+    "Special Delivery",
+    "Trouble Brewin'",
+    "Vault 81",
+    "Hole in the Wall",
+    "Diamond City Radio",
+    "Sanctuary Hills",
+    "Trip to the Stars",
+    "Pull the Plug",
+    "The Big Dig",
+    "Confidence Man",
+    "Kid in a Fridge"
+  ],
+  
   "DLC - Far Harbor": [
-    "Far From Home", "Walk in the Park", "Where You Belong", "Best Left Forgotten",
-    "The Way Life Should Be", "Cleansing the Land", "Reformation", "Visions in the Fog"
+    "Far From Home",
+    "Walk in the Park",
+    "Where You Belong",
+    "Best Left Forgotten",
+    "The Way Life Should Be",
+    "Cleansing the Land",
+    "Reformation",
+    "Visions in the Fog",
+    "Close to Home",
+    "Blood Tide",
+    "The Hold Out",
+    "Turn Back the Fog",
+    "Hull Breach",
+    "What Atom Requires",
+    "The Heretic",
+    "Witch Hunt",
+    "The Great Hunt",
+    "Rite of Passage",
+    "Visions in the Fog",
+    "Data Recovery",
+    "DiMA's Memories",
+    "Acadian Ideals",
+    "The Price of Memory",
+    "Brain Dead"
   ],
+  
   "DLC - Nuka-World": [
-    "The Gauntlet", "An Ambitious Plan", "Home Sweet Home", "The Grand Tour",
-    "Power Play", "Open Season"
+    "The Gauntlet",
+    "An Ambitious Plan",
+    "Home Sweet Home",
+    "The Grand Tour",
+    "Power Play",
+    "Open Season",
+    "Precious Cargo",
+    "Cappy in a Haystack",
+    "Safari Adventure",
+    "Dry Rock Gulch",
+    "Kiddie Kingdom",
+    "Galactic Zone",
+    "Nuka-Galaxy",
+    "Star Control",
+    "A Magical Kingdom",
+    "The Lost Patrol",
+    "Beverageer",
+    "Amoral Combat",
+    "Parlor Games",
+    "Trip to the Stars",
+    "Taken for a Ride",
+    "Clearing the Way",
+    "Raiding for a Living",
+    "Shank's Missions"
   ],
+  
   "DLC - Automatron": [
-    "Mechanical Menace", "A New Threat", "Headhunting", "Rogue Robot", "Restoring Order"
+    "Mechanical Menace",
+    "A New Threat",
+    "Headhunting",
+    "Rogue Robot",
+    "Restoring Order",
+    "Radar Beacon"
+  ],
+  
+  "DLC - Vault-Tec Workshop": [
+    "A Model Citizen",
+    "Power Cycle",
+    "Vision of the Future",
+    "Explore Vault 88",
+    "Build the Overseer's Desk"
+  ],
+  
+  "DLC - Contraptions Workshop": [
+    "Contraptions Workshop Tutorial"
+  ],
+  
+  "DLC - Wasteland Workshop": [
+    "Wasteland Workshop Tutorial"
+  ],
+  
+  "Radiant Quests - Minutemen": [
+    "Kidnapping at [Settlement]",
+    "Raider Troubles at [Settlement]",
+    "Super Mutant Threat at [Settlement]",
+    "Ghoul Problem at [Settlement]",
+    "Greenskins at [Settlement]",
+    "Clearing the Way",
+    "Returning the Favor",
+    "Defend Artillery at [Settlement]",
+    "Resettle Refugees at [Settlement]",
+    "Stop the Raiding at [Settlement]"
+  ],
+  
+  "Radiant Quests - Brotherhood": [
+    "Cleansing the Commonwealth",
+    "Learning Curve",
+    "Feeding the Troops",
+    "Leading by Example",
+    "Quartermastery",
+    "Reactor Coolant",
+    "Duty or Dishonor",
+    "Blood Bank",
+    "Feeding the Troops"
+  ],
+  
+  "Radiant Quests - Railroad": [
+    "Jackpot (Carrington)",
+    "Mercer Safehouse",
+    "Randolph Safehouse",
+    "Concierge",
+    "High Ground",
+    "Variable Removal",
+    "Weathervane",
+    "Dead Drop",
+    "To the Mattresses",
+    "Lost Soul",
+    "Operation Ticonderoga"
+  ],
+  
+  "Radiant Quests - Institute": [
+    "Building a Better Crop",
+    "Plugging a Leak",
+    "Pest Control",
+    "Reclamation",
+    "Political Leanings",
+    "A House Divided"
+  ],
+  
+  "Radiant Quests - Misc": [
+    "Out of the Fire (Scribe Haylen)",
+    "Cleansing the Commonwealth (Knight Rhys)",
+    "Quartermastery (Proctor Teagan)",
+    "Randolph Safehouse (PAM)",
+    "Concierge (Tom)",
+    "Variable Removal (Tinker Tom)",
+    "Mercer Safehouse (PAM)",
+    "Memory Interrupted (Dr. Amari)",
+    "Butcher's Bill (Glory)",
+    "To the Mattresses (Drummer Boy)"
+  ],
+  
+  "Settlement Quests": [
+    "Sanctuary (Minutemen)",
+    "The First Step (Minutemen)",
+    "Building a Settlement",
+    "Defend [Settlement]",
+    "Recruitment Radio Beacon",
+    "Setting up Supply Lines",
+    "Workshop Tutorial",
+    "Graygarden",
+    "Greentop Nursery",
+    "Oberland Station",
+    "Sunshine Tidings Co-op",
+    "Tenpines Bluff"
+  ],
+  
+  "Location-Based Quests": [
+    "Salem Witchcraft Museum",
+    "Suffolk County Charter School",
+    "Dunwich Borers",
+    "Museum of Witchcraft",
+    "Jamaica Plain Treasure",
+    "Wilson Atomatoys Corporate HQ",
+    "Vault 75",
+    "Vault 81",
+    "Vault 95",
+    "Vault 111",
+    "Cabot House",
+    "Pickman Gallery",
+    "Trinity Tower"
   ]
 };
 
