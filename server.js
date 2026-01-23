@@ -10,16 +10,6 @@ const app = express();
 
 const staticPath = path.join(process.cwd(), 'public');
 
-console.log('Current working dir:', process.cwd());
-console.log('Serving static from:', staticPath);
-
-if (fs.existsSync(staticPath)) {
-  console.log('public folder exists! Contents:', fs.readdirSync(staticPath));
-} else {
-  console.log('public folder MISSING!');
-}
-
-app.use(express.static(staticPath));
 
 // SPA fallback for React Router
 app.get('*', (req, res) => {
@@ -156,7 +146,7 @@ app.post('/api/progress/:userId', async (req, res) => {
         res.status(500).json({ error: 'Failed to update progress' });
     }
 });
-
+app.use(express.static(staticPath));
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
