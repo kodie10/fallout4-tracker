@@ -1,4 +1,18 @@
-const { getPool } = require('./_db');
+const { Pool } = require('pg');
+
+let pool;
+
+function getPool() {
+  if (!pool) {
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL,
+      ssl: process.env.DATABASE_URL ? {
+        rejectUnauthorized: false
+      } : undefined
+    });
+  }
+  return pool;
+}
 
 module.exports = async (req, res) => {
   // Enable CORS
@@ -13,7 +27,6 @@ module.exports = async (req, res) => {
   const pool = getPool();
 
   // Extract userId from URL path
-  // URL will be like: /api/progress?userId=1 or /api/progress/1
   const urlParts = req.url.split('/');
   const userId = urlParts[urlParts.length - 1] || req.query.userId;
 
@@ -55,6 +68,6 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
     console.error('Progress error:', error);
-    res.status(500).json({ error: 'Failed to handle progress' });
+    res.status(500).json({ error: 'Failed to handle progress', details: error.message });
   }
 };

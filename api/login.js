@@ -1,5 +1,19 @@
 const bcrypt = require('bcrypt');
-const { getPool } = require('./_db');
+const { Pool } = require('pg');
+
+let pool;
+
+function getPool() {
+  if (!pool) {
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL,
+      ssl: process.env.DATABASE_URL ? {
+        rejectUnauthorized: false
+      } : undefined
+    });
+  }
+  return pool;
+}
 
 module.exports = async (req, res) => {
   // Enable CORS
@@ -41,6 +55,6 @@ module.exports = async (req, res) => {
     res.status(200).json({ user: { id: user.id, username: user.username } });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    res.status(500).json({ error: 'Login failed', details: error.message });
   }
 };
